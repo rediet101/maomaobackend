@@ -48,7 +48,15 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-ENV PORT=10000
+# Sensible production defaults (overridden by Render environment variables)
+ENV PORT=10000 \
+    APP_ENV=production \
+    APP_DEBUG=false \
+    LOG_CHANNEL=stderr \
+    SESSION_DRIVER=file \
+    CACHE_DRIVER=file \
+    QUEUE_CONNECTION=sync
+
 EXPOSE 10000
 
 ENTRYPOINT ["docker-entrypoint.sh"]

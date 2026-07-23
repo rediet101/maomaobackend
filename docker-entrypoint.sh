@@ -1,16 +1,20 @@
 #!/bin/bash
 set -e
 
-# Run package discovery
-php artisan package:discover --ansi || true
+# Ensure correct permissions on storage and bootstrap/cache before running commands
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Cache configuration, routes, and views for production performance
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
+# Run artisan commands as the www-data user to avoid root-owned files
+su -s /bin/bash -c "php artisan package:discover --ansi" www-data || true
+su -s /bin/bash -c "php artisan config:cache" www-data || true
+su -s /bin/bash -c "php artisan route:cache" www-data || true
+su -s /bin/bash -c "php artisan view:cache" www-data || true
+su -s /bin/bash -c "php artisan migrate --force" www-data || true
 
-# Run database migrations automatically on startup
-php artisan migrate --force || true
+# Final permission check
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Start Apache web server in foreground
 exec apache2-foreground "$@"

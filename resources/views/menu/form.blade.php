@@ -219,7 +219,7 @@
 
                             <div class="img-preview-wrap">
                                 @if ($item?->image)
-                                    <img id="img-preview" src="{{ asset('storage/'.$item->image) }}" class="img-preview" alt="Current image">
+                                    <img id="img-preview" src="{{ $item->imageUrl() }}" class="img-preview" alt="Current image">
                                     <div class="img-preview-label">Current image — upload a new one to replace it</div>
                                 @else
                                     <img id="img-preview" src="" class="img-preview" alt="Preview" style="display:none">

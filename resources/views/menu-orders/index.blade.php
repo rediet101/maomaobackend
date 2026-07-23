@@ -129,7 +129,7 @@
                                             <td>
                                                 <div style="display:flex;align-items:center;gap:8px">
                                                     @if ($order->menuItem?->image)
-                                                        <img src="{{ asset('storage/'.$order->menuItem->image) }}" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0">
+                                                        <img src="{{ $order->menuItem->imageUrl() }}" style="width:32px;height:32px;border-radius:8px;object-fit:cover;flex-shrink:0">
                                                     @else
                                                         <div style="width:32px;height:32px;border-radius:8px;background:#f5ede6;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">🎂</div>
                                                     @endif

@@ -192,7 +192,7 @@
                         @foreach ($items as $item)
                             <div class="menu-card">
                                 @if ($item->image)
-                                    <img src="{{ str_starts_with($item->image, 'http') ? $item->image : asset('storage/'.ltrim($item->image, '/')) }}" alt="{{ $item->title }}" class="menu-card-img">
+                                    <img src="{{ $item->imageUrl() }}" alt="{{ $item->title }}" class="menu-card-img">
                                 @else
                                     <div class="menu-card-img-placeholder">🎂</div>
                                 @endif

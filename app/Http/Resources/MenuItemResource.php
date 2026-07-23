@@ -17,9 +17,7 @@ class MenuItemResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'price' => number_format((float) $this->price, 2),
-            'image_url' => $this->image
-                ? asset('storage/'.$this->image)
-                : null,
+            'image_url' => $this->imageUrl(),
             'is_available' => $this->is_available,
             'created_at' => $this->created_at->toISOString(),
             'updated_at' => $this->updated_at->toISOString(),

@@ -279,7 +279,7 @@
                             </div>
                             @if ($menuOrder->menuItem)
                                 @if ($menuOrder->menuItem->image)
-                                    <img src="{{ asset('storage/'.$menuOrder->menuItem->image) }}" class="item-img" alt="{{ $menuOrder->menuItem->title }}">
+                                    <img src="{{ $menuOrder->menuItem->imageUrl() }}" class="item-img" alt="{{ $menuOrder->menuItem->title }}">
                                 @else
                                     <div class="item-img-placeholder">🎂</div>
                                 @endif

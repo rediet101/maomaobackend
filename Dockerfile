@@ -1,17 +1,21 @@
 FROM php:8.3-apache
 
-# Install system dependencies and PHP extensions
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Install system dependencies and PHP extensions required by Laravel
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libicu-dev \
+    libsqlite3-dev \
+    libzip-dev \
     zip \
     unzip \
     curl \
     git \
-    libsqlite3-dev \
-    libzip-dev \
-    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip intl opcache
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
@@ -25,8 +29,8 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . /var/www/html
 
-# Install production PHP dependencies (--no-scripts prevents artisan package:discover from failing at build time)
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+# Install production PHP dependencies safely
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 # Configure Apache DocumentRoot to point to Laravel's public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

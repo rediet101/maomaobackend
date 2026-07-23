@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring exif pcntl bcmath gd zip intl opcache
+    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite mbstring exif pcntl bcmath gd zip intl opcache
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite

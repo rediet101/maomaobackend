@@ -1,14 +1,18 @@
 #!/bin/bash
 set -e
 
-# Run artisan commands as root to ensure all Render environment variables are preserved
-php artisan package:discover --ansi || true
-php artisan config:cache || true
-php artisan route:cache || true
-php artisan view:cache || true
-php artisan migrate --force || true
+# Ensure correct permissions on storage and bootstrap/cache before running commands
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Ensure correct permissions and ownership on storage and bootstrap/cache (including generated cache/log files)
+# Run artisan commands as the www-data user to avoid root-owned files
+su -s /bin/bash -c "php artisan package:discover --ansi" www-data || true
+su -s /bin/bash -c "php artisan config:cache" www-data || true
+su -s /bin/bash -c "php artisan route:cache" www-data || true
+su -s /bin/bash -c "php artisan view:cache" www-data || true
+su -s /bin/bash -c "php artisan migrate --force" www-data || true
+
+# Final permission check
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 

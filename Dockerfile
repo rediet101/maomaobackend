@@ -39,10 +39,12 @@ RUN cp .env.docker .env
 # Install production PHP dependencies safely
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
-# Configure Apache DocumentRoot to point to Laravel's public directory
+# Configure Apache DocumentRoot and directory permissions for symlinks + htaccess
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+RUN printf '<Directory /var/www/html/public>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride All\n\tRequire all granted\n</Directory>\n' >> /etc/apache2/apache2.conf
 
 # Configure Apache to listen on Render's dynamic PORT variable
 RUN sed -i 's/Listen 80/Listen ${PORT}/g' /etc/apache2/ports.conf

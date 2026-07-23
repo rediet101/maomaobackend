@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Run package discovery
+php artisan package:discover --ansi || true
+
 # Cache configuration, routes, and views for production performance
 php artisan config:cache || true
 php artisan route:cache || true

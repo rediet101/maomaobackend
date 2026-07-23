@@ -25,8 +25,8 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . /var/www/html
 
-# Install production PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# Install production PHP dependencies (--no-scripts prevents artisan package:discover from failing at build time)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Configure Apache DocumentRoot to point to Laravel's public directory
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public

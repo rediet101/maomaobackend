@@ -26,8 +26,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy project files
+# Copy project files and environment configuration
 COPY . /var/www/html
+RUN cp .env.docker .env
 
 # Install production PHP dependencies safely
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs

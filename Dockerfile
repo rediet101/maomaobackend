@@ -10,12 +10,13 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libsqlite3-dev \
     libzip-dev \
+    libpq-dev \
     zip \
     unzip \
     curl \
     git \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite mbstring exif pcntl bcmath gd zip intl opcache
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pdo_sqlite mbstring exif pcntl bcmath gd zip intl opcache
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite

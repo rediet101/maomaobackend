@@ -11,13 +11,15 @@ su -s /bin/bash -c "php artisan package:discover --ansi" www-data || true
 su -s /bin/bash -c "php artisan config:cache" www-data || true
 su -s /bin/bash -c "php artisan route:cache" www-data || true
 su -s /bin/bash -c "php artisan view:cache" www-data || true
+# Re-create public storage symlink
+rm -rf /var/www/html/public/storage
 su -s /bin/bash -c "php artisan storage:link" www-data || true
 su -s /bin/bash -c "php artisan migrate --force" www-data || true
 su -s /bin/bash -c "php artisan db:seed --force" www-data || true
 
 # Final permission check
-chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+chown -R www-data:www-data /var/www/html/storage /var/www/html/public
+chmod -R 775 /var/www/html/storage /var/www/html/public
 
 # Start Apache web server in foreground
 exec apache2-foreground "$@"

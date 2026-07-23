@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-#[Fillable(['title', 'description', 'price', 'image', 'is_available'])]
+#[Fillable(['title', 'description', 'price', 'image', 'image_data', 'is_available'])]
 class MenuItem extends Model
 {
     /** @use HasFactory<MenuItemFactory> */
@@ -27,6 +27,10 @@ class MenuItem extends Model
 
     public function imageUrl(): ?string
     {
+        if ($this->image_data) {
+            return $this->image_data;
+        }
+
         if (! $this->image) {
             return null;
         }

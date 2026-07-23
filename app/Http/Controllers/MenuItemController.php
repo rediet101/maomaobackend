@@ -6,19 +6,21 @@ use App\Http\Requests\StoreMenuItemRequest;
 use App\Http\Requests\UpdateMenuItemRequest;
 use App\Models\MenuItem;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class MenuItemController extends Controller
 {
-    public function index(\Illuminate\Http\Request $request): View
+    public function index(Request $request): View
     {
         $search = $request->input('search');
 
         $items = MenuItem::when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('description', 'like', "%{$search}%");
-            })
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        })
             ->latest()
             ->paginate(15)
             ->appends($request->query());
@@ -37,7 +39,9 @@ class MenuItemController extends Controller
         $data['is_available'] = $request->boolean('is_available');
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('menu', 'public');
+            $image = $request->file('image');
+            $data['image'] = $image->store('menu', 'public');
+            $data['image_data'] = $this->imageDataUrl($image);
         }
 
         MenuItem::create($data);
@@ -59,7 +63,10 @@ class MenuItemController extends Controller
             if ($menuItem->image) {
                 Storage::disk('public')->delete($menuItem->image);
             }
-            $data['image'] = $request->file('image')->store('menu', 'public');
+
+            $image = $request->file('image');
+            $data['image'] = $image->store('menu', 'public');
+            $data['image_data'] = $this->imageDataUrl($image);
         }
 
         $menuItem->update($data);
@@ -76,5 +83,10 @@ class MenuItemController extends Controller
         $menuItem->delete();
 
         return redirect()->route('menu.index')->with('success', 'Menu item deleted.');
+    }
+
+    private function imageDataUrl(UploadedFile $image): string
+    {
+        return 'data:'.$image->getMimeType().';base64,'.base64_encode((string) file_get_contents($image->getRealPath()));
     }
 }

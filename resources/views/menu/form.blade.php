@@ -213,7 +213,7 @@
                         <div class="form-card-body">
                             <div class="field">
                                 <label for="image">{{ $item?->image ? 'Replace Image' : 'Upload Image' }}</label>
-                                <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+                                <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,.gif,.svg,.webp,image/jpeg,image/png,image/gif,image/svg+xml,image/webp" onchange="previewImage(event)">
                                 @error('image') <div class="field-error">{{ $message }}</div> @enderror
                             </div>
 

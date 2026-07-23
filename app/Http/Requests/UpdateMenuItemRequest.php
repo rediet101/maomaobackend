@@ -20,7 +20,7 @@ class UpdateMenuItemRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
-            'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp,heic', 'max:20480'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:20480'],
             'is_available' => ['sometimes', 'boolean'],
         ];
     }

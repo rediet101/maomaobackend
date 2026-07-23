@@ -5,7 +5,8 @@ set -e
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Run artisan commands as the www-data user to avoid root-owned files
+# Clear and rebuild cache for environment variables
+su -s /bin/bash -c "php artisan config:clear" www-data || true
 su -s /bin/bash -c "php artisan package:discover --ansi" www-data || true
 su -s /bin/bash -c "php artisan config:cache" www-data || true
 su -s /bin/bash -c "php artisan route:cache" www-data || true
